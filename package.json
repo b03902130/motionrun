@@ -29,12 +29,12 @@
     "socket.io-client": "^2.2.0"
   },
   "scripts": {
-    "start": "node backend/server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node backend/server.js",
-    "server-debug": "nodemon --inspect=5001 backend/server.js",
+    "server": "node server.js",
+    "server-debug": "nodemon --inspect=5001 server.js",
     "pseudo-debug": "nodemon --inspect=5001 pseudo-server.js"
   },
   "eslintConfig": {
