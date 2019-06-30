@@ -111,13 +111,16 @@ homePage.post('/rooms', (req, res)=>{
         .then(allRoom=>{
             let updateRoom = [];
             allRoom.forEach(ele=>{
-                updateRoom.push({
-                    primary_k: ele.id,
-                    name: ele.name,
-                    player_num: ele.playerid.length
-                })        
+                if(!ele.active){
+                    updateRoom.push({
+                        primary_k: ele.id,
+                        name: ele.name,
+                        player_num: ele.playerid.length
+                    })       
+                } 
             })
             io.in('home').emit('update_rooms', updateRoom);
+            console.log("io works");
         })
         .catch(err=>{
             console.log(err);
