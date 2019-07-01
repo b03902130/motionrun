@@ -12,9 +12,13 @@ export const register = newUser => {
     return axios
         .post(window.env.backend + 'users/register', data)
         .then(res => {
-            alert("Registered")
+            if (res.data.status && res.data.status.includes('registered')) {
+                alert("Registered")
+            } else {
+                alert('Register fail')
+            }
         })
-        .catch(err => {debugger})
+        .catch(err => {alert("Register fail")})
 }
 
 
