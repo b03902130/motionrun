@@ -15,10 +15,10 @@ export const register = newUser => {
             if (res.data.status && res.data.status.includes('registered')) {
                 alert("Registered")
             } else {
-                alert('Register fail')
+                alert('Register fail. Either the email already registered or the server is down')
             }
         })
-        .catch(err => {alert("Register fail")})
+        .catch(err => {alert("Register fail due to network or database error")})
 }
 
 
