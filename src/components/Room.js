@@ -110,6 +110,9 @@ class Room extends Component {
         if (process.env.NODE_ENV === 'development') {
             pixel *= 100
         }
+        else {
+            pixel *= 10
+        }
 
         let old_x = this.state.players_info[this.userid].x
         if (diffPixels && !this.end) {
