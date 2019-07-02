@@ -139,12 +139,14 @@ class Room extends Component {
                 if (movement >= this.endpoint) {
                     let player = state.players[index]
                     let playerinfo = state.players_info[player.id]
+                    let timing = new Date().getTime() - this.startTime
                     if (!playerinfo.rank) {
                         update.players_info = {
                             ...state.players_info,
                             [player.id]: {
                                 ...playerinfo,
-                                rank: new_rank
+                                rank: new_rank,
+                                timing: timing
                             }
                         }
                         update.endplayersnum = new_rank
@@ -156,7 +158,7 @@ class Room extends Component {
                         this.end = true
                         let userid = this.userid 
                         let roomid = this.props.match.params.roomid
-                        axios.post(window.env.backend + 'record', {roomid: roomid, score: new Date().getTime() - this.startTime}, {headers: {id: userid} })
+                        axios.post(window.env.backend + 'record', {roomid: roomid, score: timing}, {headers: {id: userid} })
                             .then(res => {
                                 console.log('Update successes')
                             })
@@ -294,9 +296,14 @@ class Room extends Component {
                                                 <Grid item style={{marginTop: "30px"}}>
                                                     <h3 style={{display: "inline-block"}}><strong>{player.name}</strong></h3>
                                                     { this.state.players_info[player.id].rank &&
-                                                            <h3 style={{display: "inline-block", color: "red", fontWeight: 900, marginLeft: "15px"}}>
-                                                                {`rank ${this.state.players_info[player.id].rank}`}
-                                                            </h3>
+                                                            <span>
+                                                                <h3 style={{display: "inline-block", color: "red", fontWeight: 900, marginLeft: "15px"}}>
+                                                                    {`rank ${this.state.players_info[player.id].rank}`}
+                                                                </h3>
+                                                                <h3 style={{display: "inline-block", color: "gray", fontWeight: 900, marginLeft: "15px"}}>
+                                                                    {`${this.state.players_info[player.id].timing} ms`}
+                                                                </h3>
+                                                            </span>
                                                     }
                                                     <Runner info={this.state.players_info[player.id]} playerid={player.id} />
                                                 </Grid>        
