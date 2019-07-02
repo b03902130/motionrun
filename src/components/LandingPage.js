@@ -19,7 +19,7 @@ class LandingPage extends Component {
             :
             <div className="container">
                 <div className="jumbotron mt-5">
-                    <h1 className="display-4">Let's Run</h1>
+                    <h1 className="display-4">Motion Run</h1>
                     <p className="lead">A competition platform for gesture-controlled racing game</p>
                     <hr className="my-4"></hr>
                         <p className="lead">
