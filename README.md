@@ -144,7 +144,7 @@ $ npm install
 &nbsp;
 
 # Contributions
-This is a final organized repository. To see each one's commit history one can refer to https://github.com/b03902130/web_final
+This is a final organized repository. To see each one's commit history one can refer to another [dev repo](https://github.com/b03902130/web_final)
 - **李吉昌：** 前端影像處理、動畫設置、文書處理、demo影片拍攝。
 - **楊書文：** 前後端整體架構設計、前端介面設計、前後端連接、程式碼錯誤校正。
 - **胡均綸：** 後端運作設計、前後端連接、資料庫設計、程式碼錯誤校正。
