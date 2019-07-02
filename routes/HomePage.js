@@ -182,4 +182,23 @@ homePage.post('/record', (req, res)=>{
     })
 })
 
+homePage.get('/score', (req, res)=>{
+    let id = parseInt(req.headers.id)
+    User.findOne({
+        where: {
+            id: id
+        }
+    })
+        .then(user=>{
+            if(user){
+                res.send({score: user.score});
+            }else{
+                res.send("user is not exist!");
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+})
+
 module.exports = homePage;

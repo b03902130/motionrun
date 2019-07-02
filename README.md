@@ -1,78 +1,76 @@
 # [107-2] Web Programming Final Project
-# (Group 10) ¥Ï¦×¤j§@¾Ô
 
-## Introduction
-¨­¬°¤@­Ó¤£¤Ó¥Xªùªº¤H¡A¼g­Ó¥i¥H¦b®a¹B°Êªº¹CÀ¸¤]¬O¦X±¡¦X²zªº¡C
-§Ú­Ì°µ¤F¤@­ÓÁÉ¶]¹CÀ¸¡AÄ²µo§Aªº¶]ªÌ©¹«e¶]ªº¾÷¨î¬O³z¹Lcamera­pºâ§AÂ\°Ê´T«×¨Ó§PÂ_«e¶iªº¶ZÂ÷¡A¨ä¤¤§Ú­Ì¤]´£¨Ñµù¥U¡Bµn¿ı¡B¥H¤Î©b¶]®É¶¡±Æ¦æº]ªº¥\¯à¡C
+# (Group 10) ç”©è‚‰å¤§ä½œæˆ°
+èº«ç‚ºä¸€å€‹ä¸å¤ªå‡ºé–€çš„äººï¼Œå¯«å€‹å¯ä»¥åœ¨å®¶é‹å‹•çš„éŠæˆ²ä¹Ÿæ˜¯åˆæƒ…åˆç†çš„ã€‚
+æˆ‘å€‘åšäº†ä¸€å€‹è³½è·‘éŠæˆ²ï¼Œè§¸ç™¼ä½ çš„è·‘è€…å¾€å‰è·‘çš„æ©Ÿåˆ¶æ˜¯é€écameraè¨ˆç®—ä½ æ“ºå‹•å¹…åº¦ä¾†åˆ¤æ–·å‰é€²çš„è·é›¢ï¼Œå…¶ä¸­æˆ‘å€‘ä¹Ÿæä¾›è¨»å†Šã€ç™»éŒ„ã€ä»¥åŠå¥”è·‘æ™‚é–“æ’è¡Œæ¦œçš„åŠŸèƒ½ã€‚
+- GitHubï¼š https://github.com/b03902130/motionrun
+- Demoå½±ç‰‡é€£çµï¼šhttps://youtu.be/YT7gqlPrxHA
+- Deployé€£çµï¼šhttps://motionrun.herokuapp.com/
 
-GitHub¡G https://github.com/b03902130/web_final</br>
-Demo¼v¤ù³sµ²¡Ghttps://youtu.be/YT7gqlPrxHA</br>
-Deploy³sµ²¡Ghttps://motionrun.herokuapp.com/</br>
-## Local install
-### Install `PostgreSQL`
-#### Mac version
-- install postgres (download link: https://postgresapp.com/, and follow the install steps)
-> after install postgres database, use **terminal** to implement the following commands **(this is only based on Mac, Windows and Linux will be more complicated!)**
+&nbsp;
 
-login to database
-```
-psql -h localhost
-```
-then it'll show something like this:
-```
-Type "help" for help.
+# Local environment setup
+## 1. Install `PostgreSQL`
+Postgresql use your **operating system account name** as your default accessible role (postgresql jargon) and database name. That is, if you login your system with the name **os_account**, you also need to use **os_account** as role name and database name. In the following steps we assume we logged in as **os_account**.
 
-ryanhu=# (you can type something here)
-```
-please type:
-```
-ryanhu=# \l
-```
-and you will see you default database name also username
-- change **database name** and **username** as your own default value in **database/database.js** there is a chunk of code showed as below:(after download postgresql on Mac env, you will see it), and of course, saved it.
-```javascript=
-const sequelize = new Sequelize('<database name>', '<username>', null, {
-  host: 'localhost',
-  dialect: 'postgres'
-  
-  // some code here...
-});
-```
+### Mac version
+---
+download (https://postgresapp.com/) and follow the installation steps, it will automatically create a role and a database  both named after **os_account**.
 
-- create table: the code below is based on my env, so the username may be different from mine.
-```
-ryanhu=# create table users (id serial primary key, first_name text, last_name text, email text, password text, created text, score integer);
-ryanhu=# create table rooms (id serial primary key, name text, active boolean, playerid integer ARRAY[3]);
-```
+&nbsp;
 
-#### Linux version
+### Linux version
+
+---
+
 - update and install related packages
 ```shell
 $ sudo apt-get update
 $ sudo apt-get install postgresql postgresql-contrib
 ```
-- Create a new **role** (postgresql jargon). The **role name** must be exactly same as your now logged in **linux account name**. In following steps we assume you are logged in as `linux_name`
+- Create a new role. The role name must be exactly same as your now logged in **operating system account name**, assuming `os_account`
 ```shell
 $ sudo -u postgres createuser --interactive
 
 ***Output***
-> Enter name of role to add: linux_name
+> Enter name of role to add: os_account
 > Shall the new role be a superuser? (y/n) y
 ```
-- Create a new database. Again, **database name** must be exactly same as your **linux account name**
+- Create a new database. Again, database name must be exactly same as your **operating system account name**, assuming `os_account`
 ```shell
-$ sudo -u postgres createdb linux_name
-```
-- enter psql (postgresql database console), add tables which are necessary for our web app, and set password
-```shell
-$ psql
-> create table users (id serial primary key, first_name text, last_name text, email text, password text, created text, score integer);
-> create table rooms (id serial primary key, name text, active boolean, playerid integer ARRAY[3]);
-> alter user linux_name password 'new_password';
+$ sudo -u postgres createdb os_account
+
 ```
 
-### (Optional) Test connection to `PostgreSQL`
-In our web app, we use `sequelize` as ORM to manipulate `postgresql` database
+&nbsp;
+
+## 2. Enter into database console and setup configurations
+
+- Enter into postgresql database console
+```
+$ psql
+```
+
+- Inside database console, type folowing commands. `os_account` should be replaced with your **operating system account name** and `new_password` can be set as whatever you like.
+```shell
+$ create table users (id serial primary key, first_name text, last_name text, email text, password text, created text, score integer);
+$ create table rooms (id serial primary key, name text, active boolean, playerid integer ARRAY[3]);
+$ alter user os_account password 'new_password';
+```
+
+&nbsp;
+
+## 3. Connect to database with `Sequelize`
+In our web app, we use `sequelize` as ORM to manipulate `postgresql` database. The connection configuration is set in .env in project root directory.
+
+### Modify code to accommodate with new database
+- Create a new file `.env` and place it at root directory of this repository.
+- Modify `.env` as following. Remember to replace `os_account`, `new_password` with proper value.
+```javascript=
+DATABASE_URL=postgres://os_account:new_password@localhost:5432/os_account
+```
+After this setting, `Sequelize` should be able to connect the database. You can test the connectivity by following steps.
+1. Create a testing directory
 ```shell
 $ mkdir test
 $ cd test
@@ -80,13 +78,12 @@ $ npm init -y
 $ npm install --save sequelize pg pg-hstore
 $ vim test.js
 ```
-Edit `test.js` as following
+2. Edit `test.js` as following. Again, remember to replace `os_account` and `new_password` with proper values
 ```javascript=
 // test.js
 
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('linux_name', 'linux_name', 'new_password', {
-  host: 'localhost',
+const sequelize = new Sequelize('postgres://os_account:new_password@localhost:5432/os_account', {
   dialect: 'postgres'
 });
 
@@ -99,72 +96,64 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 ```
+3. You can run `node test.js` to check the connectivity of database
 
-You can run `node test.js` to check the connectivity of database
+&nbsp;
 
-## Install package
-
-- back-end
-```
-npm intall
-
-npm run dev
-```
-- front-end
-```
-cd /client
-
-npm install
-
-npm start
+## 4. Install packages
+- npm version should be higher then 6.9.0
+```shell
+$ npm install
 ```
 
-## Function
-#### µù¥U
-§PÂ_¿é¤J±b¸¹¬O§_¦s¦b©ódb¤¤¡A­Y¤£¦s¦b«h¯à°÷µù¥U±b¸¹¡A­Y¦s¦b«h¦^ÂĞ±b¸¹¤w¦s¦bªºalert°T®§¡C
-#### µn¿ı
-§PÂ_¿é¤J±b¸¹¬O§_¦s¦b©ódb¥B¿é¤J±K½X¬O§_§k¦X¸ê®Æ¤ñ¹ï¡A­Y±ø¥ó¤£¹F¦¨«h¦^¶Ç¤£¦Xªkalert°T®§¡A¦Xªk«h¯àµn¿ı¶i¨ì¹CÀ¸¤jÆU¡C
-#### ¶}©Ğ¶¡¡B¶i¤J©Ğ¶¡¡Bµ¥«İ¹CÀ¸¡B¤¤³õÂ÷¶}
-«e«áºİ·|·¾³q¥h¬ö¿ı¨Ï¥ÎªÌ¥Ø«eªºª¬ºA¡AÅı«e«áºİ°w¹ï¨Ï¥ÎªÌªº°T®§«O«ù¤@­P¡C
-#### ¹CÀ¸¤¬°Ê
-³z¹Lcamera·P´ú¼v¹³¡A§Q¥Îimage processingªº§Ş³N°µ¨ìreal timeªºmotion detection¡A³z¹L­pºâ¨â­Ó®É¶¡ÂI¦Ç«×­È¤£¤@¼Ëªºpixel¼Æ¶q¥hÅX°Ê¶]ªÌ«e¶iª½¦Ü¶]ªÌ©è¹F²×ÂI¡C
-#### ±Æ¦æº]
-«áºİ·|¬ö¿ı¨C­Ó·|­ûªº³Ì¨Î¬ö¿ı¨Ã°w¹ï¬ö¿ı°µ±Æ¦W¡A¤½§i¦b¹CÀ¸¤jÆU·í¤¤¡C
-#### ¥[±K¸ê®Æ®w
-«áºİdb¦s¨úªº¸ê®Æ³£¬O±K¤å¡A§Y¨Ïserver³Q°½¿s¤]¯à°÷ºû«ùforward secrecy¡C
+## 5. Start development
+- backend server
+    - `npm run server-debug`
+    - will run at `http://localhost:5000/`
+- frontend webpack server
+    - `npm start`
+    - will run at `http://localhost:3000/`
+- build for deployment
+    - `npm run build`
+    - will generate a `build/` folder at the root of repository, and the backend server will automatically serve files in this `build/` folder (eg. index.html) when we open the web app with `http://localhost:5000/`
 
-## Framework¡BModule¡BSource
-gif source¡Ghttps://giphy.com/explore/reaction-speed?fbclid=IwAR34JC9L-D4w8vUNOfUjptjcfLQn8CuWjB_woFaNkNHCYMxTc8aAotuA9zc </br>
-web-camera¡Ghttps://www.npmjs.com/package/react-webcam </br>
-react-rebound¡Ghttps://www.npmjs.com/package/react-rebound </br>
-materialUI¡Ghttps://material-ui.com/ </br>
+&nbsp;
 
-## Tools¡BDatabse
-backend: axios, bcryptjs, jsonwebtoken, sequelize</br>
-frontend: React, React-router, bootstrap, express</br>
-db: PostgreSQL</br>
-deployment: heroku</br>
+# Functions
+### è¨»å†Š
+åˆ¤æ–·è¼¸å…¥å¸³è™Ÿæ˜¯å¦å­˜åœ¨æ–¼dbä¸­ï¼Œè‹¥ä¸å­˜åœ¨å‰‡èƒ½å¤ è¨»å†Šå¸³è™Ÿï¼Œè‹¥å­˜åœ¨å‰‡å›è¦†å¸³è™Ÿå·²å­˜åœ¨çš„alertè¨Šæ¯ã€‚
+### ç™»éŒ„
+åˆ¤æ–·è¼¸å…¥å¸³è™Ÿæ˜¯å¦å­˜åœ¨æ–¼dbä¸”è¼¸å…¥å¯†ç¢¼æ˜¯å¦å»åˆè³‡æ–™æ¯”å°ï¼Œè‹¥æ¢ä»¶ä¸é”æˆå‰‡å›å‚³ä¸åˆæ³•alertè¨Šæ¯ï¼Œåˆæ³•å‰‡èƒ½ç™»éŒ„é€²åˆ°éŠæˆ²å¤§å»³ã€‚
+### é–‹æˆ¿é–“ã€é€²å…¥æˆ¿é–“ã€ç­‰å¾…éŠæˆ²ã€ä¸­å ´é›¢é–‹
+å‰å¾Œç«¯æœƒæºé€šå»ç´€éŒ„ä½¿ç”¨è€…ç›®å‰çš„ç‹€æ…‹ï¼Œè®“å‰å¾Œç«¯é‡å°ä½¿ç”¨è€…çš„è¨Šæ¯ä¿æŒä¸€è‡´ã€‚
+### éŠæˆ²äº’å‹•
+é€écameraæ„Ÿæ¸¬å½±åƒï¼Œåˆ©ç”¨image processingçš„æŠ€è¡“åšåˆ°real timeçš„motion detectionï¼Œé€éè¨ˆç®—å…©å€‹æ™‚é–“é»ç°åº¦å€¼ä¸ä¸€æ¨£çš„pixelæ•¸é‡å»é©…å‹•è·‘è€…å‰é€²ç›´è‡³è·‘è€…æŠµé”çµ‚é»ã€‚
+### æ’è¡Œæ¦œ
+å¾Œç«¯æœƒç´€éŒ„æ¯å€‹æœƒå“¡çš„æœ€ä½³ç´€éŒ„ä¸¦é‡å°ç´€éŒ„åšæ’åï¼Œå…¬å‘Šåœ¨éŠæˆ²å¤§å»³ç•¶ä¸­ã€‚
+### åŠ å¯†è³‡æ–™åº«
+å¾Œç«¯dbå­˜å–çš„è³‡æ–™éƒ½æ˜¯å¯†æ–‡ï¼Œå³ä½¿serverè¢«å·çªºä¹Ÿèƒ½å¤ ç¶­æŒforward secrecyã€‚
 
-## Specializations
-§õ¦N©÷¡G«eºİ¼v¹³³B²z¡B°Êµe³]¸m¡B¤å®Ñ³B²z¡Bdemo¼v¤ù©çÄá¡C</br>
-·¨®Ñ¤å¡G«e«áºİ¾ãÅé¬[ºc³]­p¡B«eºİ¤¶­±³]­p¡B«e«áºİ³s±µ¡Bµ{¦¡½X¿ù»~®Õ¥¿¡C</br>
-­J§¡ºú¡G«áºİ¹B§@³]­p¡B«e«áºİ³s±µ¡B¸ê®Æ®w³]­p¡Bµ{¦¡½X¿ù»~®Õ¥¿¡C</br>
-</br>
+&nbsp;
 
-## Thoughts
-§õ¦N©÷¡G</br>
-¦Û¤v¹ê»Ú¤W­t³dªº³¡¥÷loading¸û»´¡A«Ü·PÁÂ¥t¥~¨â¦ì¤j¯«¤j¤O³Í·ç¡A³o¦¸¬O¤@­Ó«Ü´r§Öªº¦X§@¸gÅç¡A·í¥Xµo·Qªº®É­Ô´NÄ±±o¤@©w­n·Q¤@­Ó«Ü¦n¯ºªº¹CÀ¸¡A¥»¨Ó¬O¥´ºâ³]­p¦¨¤â«ü¹B°Ê¨Ó¹ïÀ³¶]ªÌªº«e¶iªº¡A¦ı«á¨ÓÃª©ójs¯x°}¹Bºâ§ä¤£¨ìpython¦³numpyÃş¦üªº¥[³t¤u¨ã¤ä´©¡A¥[¤W¿ëÃÑ·|¦³¥¿½T²vªº°İÃD¡A®e©ö³Q¿O¥ú©Î¬O­I´ºµ¹¤zÂZ¡A©Ò¥H´NÅÜ¦¨motion detection¤F¡A·Q¤£¨ì¹ê»Ú¤Wª±°_¨Ó²Û®¢«×¤j´T´£¤É¡A§Ú­Ì¦b©@°ØÆU¸Õª±ªº®É­Ô©±­û¶]¹L¨ÓÃö¤Á¡A¤j®a¥i¥H¸Õª±¬İ¬İ¡A«OÃÒ´§¦½¦p«B³á¡I</br>
+# Packages
+- Backend: axios, bcryptjs, jsonwebtoken, sequelize, PostgreSQL, express, socket.io
+- Frontend: axios, socket.io, React, React-route, bootstrap, react-rebound, web-camera, material-ui
+- Deployment: heroku
+- Gif sourceï¼šhttps://giphy.com/explore/reaction-speed?fbclid=IwAR34JC9L-D4w8vUNOfUjptjcfLQn8CuWjB_woFaNkNHCYMxTc8aAotuA9zc
 
-·¨®Ñ¤å¡G</br>
-³o¦¸ final ­ì¥»³£º¡¶¶§Qªº¡Aµ²ªG¨S·Q¨ì¦b³Ì«á´X¤Ñ¥X²{¤F¤@¨Ç·Q³£¨S·Q¹Lªº bug¡AÁöµM³£¬O tracable¡A¤]³£¥i¥H¸Ñ¦ı¯uªºÅı§Ú­Ìªá¶O¤F¤£¤Öªº®É¶¡¦b³B²z¡C
-«Ü°ª¿³¦³¾÷·|¯à¦b¤j¾Ç®É´Áªº³Ì«á¥i¥H¹J¨ì¦X§@´r§Öªº¹Ù¦ñ¡]¨C¦¸²Õ¶¤³£³Q¹p...¡^¡A¤]·PÁÂ§Úªº²Õ­û³£«Ü¦³³d¥ô·PÄ@·N°µ§ó¦h¨Æ¡A¤j®a´»°²§Ö¼Ö¡I
+&nbsp;
 
+# Specializations
+- **æå‰æ˜Œï¼š** å‰ç«¯å½±åƒè™•ç†ã€å‹•ç•«è¨­ç½®ã€æ–‡æ›¸è™•ç†ã€demoå½±ç‰‡æ‹æ”ã€‚
+- **æ¥Šæ›¸æ–‡ï¼š** å‰å¾Œç«¯æ•´é«”æ¶æ§‹è¨­è¨ˆã€å‰ç«¯ä»‹é¢è¨­è¨ˆã€å‰å¾Œç«¯é€£æ¥ã€ç¨‹å¼ç¢¼éŒ¯èª¤æ ¡æ­£ã€‚
+- **èƒ¡å‡ç¶¸ï¼š** å¾Œç«¯é‹ä½œè¨­è¨ˆã€å‰å¾Œç«¯é€£æ¥ã€è³‡æ–™åº«è¨­è¨ˆã€ç¨‹å¼ç¢¼éŒ¯èª¤æ ¡æ­£ã€‚
 
-­J§¡ºú¡G</br>
+&nbsp;
 
-¸g¹L¤@¾Ç´Áªº½Òµ{¡Aµo²{¦Û¤v¹ï©ó«áºİ©M¸ê®Æ®w¬Æ¦Üºô¸ô¬[ºcªº¿³½ì»·»·¦h¹L©ó«eºİ¡Aº¡¶}¤ß¦Û¤v¦³¾÷·|¯à°÷³Q¼F®`ªº²Õ­û«H¥ô¡AÄ@·NÅı§Ú¦b final ¤¤­t³d«áºİªº³¡¤À¡C
+# Thoughts
+- **æå‰æ˜Œï¼š** è‡ªå·±å¯¦éš›ä¸Šè² è²¬çš„éƒ¨ä»½loadingè¼ƒè¼•ï¼Œå¾ˆæ„Ÿè¬å¦å¤–å…©ä½å¤§ç¥å¤§åŠ›å‡±ç‘ï¼Œé€™æ¬¡æ˜¯ä¸€å€‹å¾ˆæ„‰å¿«çš„åˆä½œç¶“é©—ï¼Œç•¶å‡ºç™¼æƒ³çš„æ™‚å€™å°±è¦ºå¾—ä¸€å®šè¦æƒ³ä¸€å€‹å¾ˆå¥½ç¬‘çš„éŠæˆ²ï¼Œæœ¬ä¾†æ˜¯æ‰“ç®—è¨­è¨ˆæˆæ‰‹æŒ‡é‹å‹•ä¾†å°æ‡‰è·‘è€…çš„å‰é€²çš„ï¼Œä½†å¾Œä¾†ç¤™æ–¼jsçŸ©é™£é‹ç®—æ‰¾ä¸åˆ°pythonæœ‰numpyé¡ä¼¼çš„åŠ é€Ÿå·¥å…·æ”¯æ´ï¼ŒåŠ ä¸Šè¾¨è­˜æœƒæœ‰æ­£ç¢ºç‡çš„å•é¡Œï¼Œå®¹æ˜“è¢«ç‡ˆå…‰æˆ–æ˜¯èƒŒæ™¯çµ¦å¹²æ“¾ï¼Œæ‰€ä»¥å°±è®Šæˆmotion detectionäº†ï¼Œæƒ³ä¸åˆ°å¯¦éš›ä¸Šç©èµ·ä¾†ç¾æ¥åº¦å¤§å¹…æå‡ï¼Œæˆ‘å€‘åœ¨å’–å•¡å»³è©¦ç©çš„æ™‚å€™åº—å“¡è·‘éä¾†é—œåˆ‡ï¼Œå¤§å®¶å¯ä»¥è©¦ç©çœ‹çœ‹ï¼Œä¿è­‰æ®æ±—å¦‚é›¨å–”ï¼
 
-¥t¥~¡A­n¨ÓÄb®¬¤@¤U¡A³o¦¸¼g§¹¯uªº²`²`Åé·| GraphQL ªº¦n¥Î¤§³B¡A¥Ñ©ó§Ú­Ì¬O¥Î¶Ç²Î restful api ©M socket.io ¬Û¤¬·f°tÀ³¥Î¡A¥X²{¤Fº¡¦h¤p bug¡A¹ê¦b¦³ÂI´o¤H¡A©¯¦n³Ì«á¤]³£¸Ñ¨M¤F¡C
+- **æ¥Šæ›¸æ–‡ï¼š** é€™æ¬¡ final åŸæœ¬éƒ½æ»¿é †åˆ©çš„ï¼Œçµæœæ²’æƒ³åˆ°åœ¨æœ€å¾Œå¹¾å¤©å‡ºç¾äº†ä¸€äº›æƒ³éƒ½æ²’æƒ³éçš„ bugï¼Œé›–ç„¶éƒ½æ˜¯ tracableï¼Œä¹Ÿéƒ½å¯ä»¥è§£ä½†çœŸçš„è®“æˆ‘å€‘èŠ±è²»äº†ä¸å°‘çš„æ™‚é–“åœ¨è™•ç†ã€‚
+å¾ˆé«˜èˆˆæœ‰æ©Ÿæœƒèƒ½åœ¨å¤§å­¸æ™‚æœŸçš„æœ€å¾Œå¯ä»¥é‡åˆ°åˆä½œæ„‰å¿«çš„å¤¥ä¼´ï¼ˆæ¯æ¬¡çµ„éšŠéƒ½è¢«é›·...ï¼‰ï¼Œä¹Ÿæ„Ÿè¬æˆ‘çš„çµ„å“¡éƒ½å¾ˆæœ‰è²¬ä»»æ„Ÿé¡˜æ„åšæ›´å¤šäº‹ï¼Œå¤§å®¶æš‘å‡å¿«æ¨‚ï¼
 
-³Ì«á·Q»¡¡A­n¼g«áºİ´N±o­n¹ïºô¸ô¬[ºc¥H¤Î¹B§@¦³¤@©wªºÁA¸Ñ¤£µM¯uªº·|¦º«ÜºG³á^^
-</br>
+- **èƒ¡å‡ç¶¸ï¼š** ç¶“éä¸€å­¸æœŸçš„èª²ç¨‹ï¼Œç™¼ç¾è‡ªå·±å°æ–¼å¾Œç«¯å’Œè³‡æ–™åº«ç”šè‡³ç¶²è·¯æ¶æ§‹çš„èˆˆè¶£é é å¤šéæ–¼å‰ç«¯ï¼Œæ»¿é–‹å¿ƒè‡ªå·±æœ‰æ©Ÿæœƒèƒ½å¤ è¢«å²å®³çš„çµ„å“¡ä¿¡ä»»ï¼Œé¡˜æ„è®“æˆ‘åœ¨ final ä¸­è² è²¬å¾Œç«¯çš„éƒ¨åˆ†ã€‚å¦å¤–ï¼Œè¦ä¾†æ‡ºæ‚”ä¸€ä¸‹ï¼Œé€™æ¬¡å¯«å®ŒçœŸçš„æ·±æ·±é«”æœƒ GraphQL çš„å¥½ç”¨ä¹‹è™•ï¼Œç”±æ–¼æˆ‘å€‘æ˜¯ç”¨å‚³çµ± restful api å’Œ socket.io ç›¸äº’æ­é…æ‡‰ç”¨ï¼Œå‡ºç¾äº†æ»¿å¤šå° bugï¼Œå¯¦åœ¨æœ‰é»æƒ±äººï¼Œå¹¸å¥½æœ€å¾Œä¹Ÿéƒ½è§£æ±ºäº†ã€‚æœ€å¾Œæƒ³èªªï¼Œè¦å¯«å¾Œç«¯å°±å¾—è¦å°ç¶²è·¯æ¶æ§‹ä»¥åŠé‹ä½œæœ‰ä¸€å®šçš„ç­è§£ä¸ç„¶çœŸçš„æœƒæ­»å¾ˆæ…˜å–”^^

@@ -1,32 +1,38 @@
 import React, { Component } from 'react';
-import jwt_decode from 'jwt-decode'
 import headshot from '../boy.png'
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
-            first_name: '',
-            last_name: '',
-            email: ''
+            first_name: 'no record',
+            last_name: 'no record',
+            email: 'no record',
+            score: 'no record'
         }
     }
 
-
     componentDidMount() {
         if (localStorage.usertoken) {
-            const token = localStorage.usertoken;
-            const decoded = jwt_decode(token);
-            // this.setState(state =>{
-            //     state.first_name = decoded.first_name;
-            //     state.last_name = decoded.last_name;
-            //     state.email = decoded.email;
-            // })
-            this.setState({
+            const token = localStorage.usertoken
+            const decoded = jwt_decode(token)
+            const userid = decoded.id
+            let update = {
                 first_name: decoded.first_name,
                 last_name: decoded.last_name,
-                email: decoded.email
-            })
+                email: decoded.email,
+            }
+            axios.get(window.env.backend + 'score', {headers: {id: parseInt(userid)} })
+                .then(res => {
+                    update.score = res.data.score
+                    this.setState(update)  
+                })
+                .catch(err => {
+                    alert('Error when getting profile')
+                    debugger
+                })
         }
     }
 
@@ -53,6 +59,10 @@ class Profile extends Component {
                                 <tr>
                                     <td>Email</td>
                                     <td>{this.state.email}</td>
+                                </tr>
+                                <tr>
+                                    <td>Fastest Record</td>
+                                    <td>{this.state.score ? `${this.state.score} ms` : 'no record'}</td>
                                 </tr>
                             </tbody>
                         </table>

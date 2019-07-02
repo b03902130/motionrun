@@ -108,7 +108,7 @@ class Room extends Component {
         pixel = pixel <= threshold ? pixel : threshold
         
         if (process.env.NODE_ENV === 'development') {
-            pixel *= 10
+            pixel *= 100
         }
 
         let old_x = this.state.players_info[this.userid].x
@@ -158,7 +158,7 @@ class Room extends Component {
                         this.end = true
                         let userid = this.userid 
                         let roomid = this.props.match.params.roomid
-                        axios.post(window.env.backend + 'record', {roomid: roomid, score: timing}, {headers: {id: userid} })
+                        axios.post(window.env.backend + 'record', {roomid: roomid, score: parseInt(timing)}, {headers: {id: userid} })
                             .then(res => {
                                 console.log('Update successes')
                             })
