@@ -24,6 +24,7 @@ class Room extends Component {
             players: [],
             timer: 3,
             players_info: {},
+            endplayersnum: 0,
         }
         this.end = false
         this.socket = undefined
@@ -108,7 +109,7 @@ class Room extends Component {
        
         let old_x = this.state.players_info[this.userid].x
         if (diffPixels && !this.end) {
-            this.step(old_x + pixel)
+            this.step(old_x + 100)
         } 
     };
     
@@ -127,24 +128,41 @@ class Room extends Component {
     judger = () => {
         let start = document.getElementsByClassName(`gif-start`)[0].getBoundingClientRect().x
         let movements = [...document.getElementsByClassName(`gif-now`)].map(obj => obj.getBoundingClientRect().x - start)
-        movements.forEach((movement, index) => {
-            if (movement >= this.endpoint) {
-                if (!this.state.winner) {
-                    this.setState({ winner: this.state.players[index].name })
+        this.setState(state => {
+            let new_rank = state.endplayersnum + 1
+            let update = {}
+            movements.forEach((movement, index) => {
+                if (movement >= this.endpoint) {
+                    let player = state.players[index]
+                    let playerinfo = state.players_info[player.id]
+                    if (!playerinfo.rank) {
+                        update.players_info = {
+                            ...state.players_info,
+                            [player.id]: {
+                                ...playerinfo,
+                                rank: new_rank
+                            }
+                        }
+                        update.endplayersnum = new_rank
+                    }
+                    if (!state.winner) {
+                        update.winner = player.name
+                    }
+                    if (!this.end && state.players[index].id == this.userid) {
+                        this.end = true
+                        let userid = this.userid 
+                        let roomid = this.props.match.params.roomid
+                        axios.post(window.env.backend + 'record', {roomid: roomid, score: new Date().getTime() - this.startTime}, {headers: {id: userid} })
+                            .then(res => {
+                                console.log('Update successes')
+                            })
+                            .catch(err => {
+                                alert('Error when posting record')
+                            })
+                    }
                 }
-                if (!this.end && this.state.players[index].id == this.userid) {
-                    this.end = true
-                    let userid = this.userid 
-                    let roomid = this.props.match.params.roomid
-                    axios.post(window.env.backend + 'record', {roomid: roomid, score: new Date().getTime() - this.startTime}, {headers: {id: userid} })
-                        .then(res => {
-                            console.log('Update successes')
-                        })
-                        .catch(err => {
-                            alert('Error when posting record')
-                        })
-                }
-            }
+            })
+            return update
         })
     }
 
@@ -267,15 +285,20 @@ class Room extends Component {
                                         justify="flex-start"
                                         alignItems="center"
                                     >
-                                    {
-                                        this.state.players.map(player => (
-                                            <Grid item style={{marginTop: "30px"}}>
-                                                <h3><strong>{player.name}</strong></h3>
-                                                <Runner info={this.state.players_info[player.id]} playerid={player.id} />
-                                            </Grid>        
-                                        ))
-                                    }
-                                    </Grid>
+                                        {
+                                            this.state.players.map(player => (
+                                                <Grid item style={{marginTop: "30px"}}>
+                                                    <h3 style={{display: "inline-block"}}><strong>{player.name}</strong></h3>
+                                                    { this.state.players_info[player.id].rank &&
+                                                            <h3 style={{display: "inline-block", color: "red", fontWeight: 900, marginLeft: "15px"}}>
+                                                                {`rank ${this.state.players_info[player.id].rank}`}
+                                                            </h3>
+                                                    }
+                                                    <Runner info={this.state.players_info[player.id]} playerid={player.id} />
+                                                </Grid>        
+                                            ))
+                                        }
+                                </Grid>
                                 </Grid>
                         }
                         <Grid item xs={4} style={{marginTop: "30px"}}>
