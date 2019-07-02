@@ -162,6 +162,7 @@ homePage.post('/record', (req, res)=>{
 
         user.update({score: newScore})
         .then(()=>{
+            res.sendStatus(200)
             Room.findOne({
                 where:{
                     id: req.body.roomid
