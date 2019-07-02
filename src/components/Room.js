@@ -23,7 +23,7 @@ class Room extends Component {
             roominfo: null,
             players: [],
             timer: 3,
-            players_x: {},
+            players_info: {},
         }
         this.end = false
         this.socket = undefined
@@ -56,31 +56,27 @@ class Room extends Component {
                 this.setState({players: data})
             })
             this.socket.on('start', data => {
-                let xs = {}
+                let info = {}
+                // initialization
                 this.state.players.forEach(player => {
-                    xs[player.id] = 0
+                    info[player.id] = {
+                        x: 0,
+                        imgurl: Math.floor(Math.random() * 15) + 1
+                    }
                 })
-                this.setState(state => ({roominfo: {...state.roominfo, active: true}, players_x: xs}))
+                this.setState(state => ({roominfo: {...state.roominfo, active: true}, players_info: info}))
                 this.interval = window.setInterval(() => {this.countdown()}, 1000)
             })
             this.socket.on('update', data => {
                 let playerid = parseInt(data.id)
                 this.setState(state => {
-                    let player = state.players.find(player => player.id === playerid)
-                    let update
-                    if (player) {
-                        let old_x = state.players_x[player.id]
+                    let info = state.players_info[playerid]
+                    if (info) {
+                        let old_x = info.x
                         let new_x = data.step > old_x ? data.step : old_x
-                        update = {
-                            players_x: {
-                                ...state.players_x,
-                                [player.id]: new_x
-                            }
-                        }
-                    } else {
-                        update = {}
+                        info.x = new_x
                     }
-                    return update
+                    return state
                 })
             })
 
@@ -110,7 +106,7 @@ class Room extends Component {
         let pixel = Math.round(diffPixels / 1000)
         pixel = pixel <= threshold ? pixel : threshold
        
-        let old_x = this.state.players_x[this.userid]
+        let old_x = this.state.players_info[this.userid].x
         if (diffPixels && !this.end) {
             this.step(old_x + pixel)
         } 
@@ -275,7 +271,7 @@ class Room extends Component {
                                         this.state.players.map(player => (
                                             <Grid item style={{marginTop: "30px"}}>
                                                 <h3><strong>{player.name}</strong></h3>
-                                                <Runner x={this.state.players_x[player.id]} playerid={player.id} />
+                                                <Runner info={this.state.players_info[player.id]} playerid={player.id} />
                                             </Grid>        
                                         ))
                                     }
