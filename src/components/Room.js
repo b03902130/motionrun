@@ -111,7 +111,7 @@ class Room extends Component {
             pixel *= 100
         }
         else {
-            pixel *= parseInt(process.env.SENSITIVITY)
+            pixel *= 5 
         }
 
         let old_x = this.state.players_info[this.userid].x
