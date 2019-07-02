@@ -106,10 +106,14 @@ class Room extends Component {
         let endpoint = this.endpoint
         let pixel = Math.round(diffPixels / 1000)
         pixel = pixel <= threshold ? pixel : threshold
-       
+        
+        if (process.env.NODE_ENV === 'development') {
+            pixel *= 10
+        }
+
         let old_x = this.state.players_info[this.userid].x
         if (diffPixels && !this.end) {
-            this.step(old_x + 100)
+            this.step(old_x + pixel)
         } 
     };
     
