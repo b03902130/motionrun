@@ -300,9 +300,12 @@ class Room extends Component {
                                                                 <h3 style={{display: "inline-block", color: "red", fontWeight: 900, marginLeft: "15px"}}>
                                                                     {`rank ${this.state.players_info[player.id].rank}`}
                                                                 </h3>
-                                                                <h3 style={{display: "inline-block", color: "gray", fontWeight: 900, marginLeft: "15px"}}>
-                                                                    {`${this.state.players_info[player.id].timing} ms`}
-                                                                </h3>
+                                                                {
+                                                                    player.id == this.userid && 
+                                                                        <h3 style={{display: "inline-block", color: "gray", fontWeight: 900, marginLeft: "15px"}}>
+                                                                            {`${this.state.players_info[player.id].timing} ms`}
+                                                                        </h3>
+                                                                }
                                                             </span>
                                                     }
                                                     <Runner info={this.state.players_info[player.id]} playerid={player.id} />
