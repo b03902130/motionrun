@@ -50,7 +50,7 @@ class Room extends Component {
                 this.setState({roominfo: data})
             })
             this.socket.on('kickout', data => {
-                alert('This room is not available currently')
+                alert('This room is not available anymore')
                 this.props.history.push('/')
             })
             this.socket.on('players', data => {
