@@ -154,7 +154,7 @@ homePage.post('/record', (req, res)=>{
     })
     .then(user=>{
         let newScore;
-        if(user.score > 0 && user.score > req.body.score){
+        if(!user.score || user.score > req.body.score){
             newScore = req.body.score;
         }else{
             newScore = user.score;
