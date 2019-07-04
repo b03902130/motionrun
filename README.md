@@ -108,9 +108,9 @@ $ npm install
 
 ## 5. Start development
 - backend server
-    - `npm run server-debug`: will run at `http://localhost:5000/`
+    - `npm run server-debug`: run backend server at `http://localhost:5000/`, and open a debug websocket channel at `localhost:5001`
 - frontend webpack server
-    - `npm start`: will run at `http://localhost:3000/`
+    - `npm start`: run react webpack server at `http://localhost:3000/`
 - build for deployment
     - `npm run build`: will build frontend files and generate a `build/` folder at the root of repository. The backend server will automatically serve files in this `build/` folder (eg. index.html) when we open the web app with `http://localhost:5000/`
     - `npm run server`: run up the server at `http://localhost:5000`. When frontend files are built, only this backend server is needed (no need to run up webpack server at port 3000)
